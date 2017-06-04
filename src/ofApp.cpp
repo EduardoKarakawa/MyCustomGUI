@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofVec2f meio = ofVec2f(ofGetWidth() / 2.0f, ofGetHeight() / 2.0f);
-	teste = MyButton("Testando", MyButton::FONT_LEFT, 3, false, meio, 100, 50);
+	teste = MyButton("Testando", MyButton::FONT_CENTER, 3, false, meio, 100, 50);
 	teste.SetSprite("1.png", "2.png");
 	teste.SetFontColor(30, 30, 30, 255);
 	
@@ -15,7 +15,6 @@ void ofApp::setup(){
 void ofApp::update(){
 	teste.Update();
 	intTeste.Update();
-	std::cout << intTeste.GetValue() << std::endl;
 }
 
 //--------------------------------------------------------------
