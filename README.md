@@ -6,7 +6,7 @@ GUI components that I'm developing as needed in my projects
 
 
 
-### Contains:
+|### Contains:|
 ____________________________
 MyButton    -> is a Toggle button.
 
