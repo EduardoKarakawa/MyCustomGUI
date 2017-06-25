@@ -1,6 +1,11 @@
 #include "IntTextBox.h"
 
 int IntTextBox::GetValue() const { return _value; }
+void IntTextBox::SetValue(int value) { _value = value; }
+
+void IntTextBox::SetFontPosition(ofVec2f& position) {
+	m_fontPosition = position;
+}
 
 
 IntTextBox::IntTextBox()
@@ -8,7 +13,7 @@ IntTextBox::IntTextBox()
 	SetPosition(0, 0);
 	SetColor(ofColor(255, 255, 255), ofColor(245, 245, 245));
 	SetFontColor(ofColor(0, 0, 0));
-	SetValue(false);
+	SetToggleValue(false);
 	m_textMargin = 0;
 	m_textPosition = 0;
 	_value = 0;
@@ -19,12 +24,24 @@ IntTextBox::IntTextBox()
 IntTextBox::IntTextBox(std::string name, int textPosition, float margin, ofVec2f &position, int defaultValue, ofColor &defaultColor, ofColor &pressedColor, ofColor &fontColor)
 {
 	SetPosition(position);
-	SetName(name);
+	SetText(name);
 	SetColor(defaultColor, pressedColor);
 	SetFontColor(fontColor);
-	SetFontPosition(textPosition, margin);
+	MyButton::SetFontPosition(textPosition, margin);
 	m_textMargin = margin;
 	m_textPosition = textPosition;
+	_value = defaultValue;
+	_timeCont = 0;
+	_drawLineEdit = false;
+}
+
+IntTextBox::IntTextBox(std::string name, ofVec2f& fontPosition, float margin, ofVec2f &position, int defaultValue, ofColor &defaultColor, ofColor &pressedColor, ofColor &fontColor) {
+	SetPosition(position);
+	SetText(name);
+	SetColor(defaultColor, pressedColor);
+	SetFontColor(fontColor);
+	SetFontPosition(fontPosition);
+	m_textMargin = margin;
 	_value = defaultValue;
 	_timeCont = 0;
 	_drawLineEdit = false;
@@ -85,17 +102,22 @@ void IntTextBox::Draw() {
 	else {
 		DrawSquare();
 	}
-	//_valuePosition.set(m_position.x + 5, m_position.y + m_height / 2.0f + m_font.stringHeight(ofToString(_value)) / 2.0f);
-	_valuePosition.set(	m_position.x + 5,
-						m_position.y + m_height / 2.0f + m_font.stringHeight(m_name) / 2.0f);
+	
+	_valuePosition.set(m_position.x + 5,
+						m_position.y + m_height / 2.0f + m_font.stringHeight("0") / 2.0f);
 
 	m_font.drawString(ofToString(_value), _valuePosition.x, _valuePosition.y);
 
 	if (_drawLineEdit > 0.5f && m_pressed) {
 		ofSetColor(m_fontColor);
 
-		ofDrawLine(	_valuePosition.x + m_font.stringWidth(ofToString(_value)) + 2, m_position.y + 5 + m_font.stringHeight(m_name) / 2.0f,
-					_valuePosition.x + m_font.stringWidth(ofToString(_value)) + 2, _valuePosition.y + m_font.stringHeight(m_name) / 2.0f);
+		// cria uma margin baseando na altura do background do botao com a altura da font
+		float margin = abs((m_height - m_font.stringHeight("0")) / 2.0f);
+
+		// Desenha a linha para feedback
+		ofDrawLine(	_valuePosition.x + m_font.stringWidth(ofToString(_value)) + 2, m_position.y + margin,
+					_valuePosition.x + m_font.stringWidth(ofToString(_value)) + 2, _valuePosition.y);
+		
 		if (_drawLineEdit > 0.8f) _drawLineEdit = 0;
 	}
 

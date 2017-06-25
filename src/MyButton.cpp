@@ -3,14 +3,16 @@
 
 // Geters para pegar informacoes do botao
 const bool & MyButton::IsPressed()		const { return m_pressed; }
-const std::string & MyButton::GetName() const { return m_name; }
+const std::string & MyButton::GetText() const { return m_name; }
 const ofVec2f & MyButton::GetPosition() const { return m_position; }
+const ofVec2f & MyButton::GetStringSize(std::string text) const { return ofVec2f(m_font.stringWidth(text), m_font.stringHeight(text)); }
+
 
 // Seters para alterar algum parametro do botao
-void MyButton::SetPosition(ofVec2f &position)		{ m_position.set(position); }
-void MyButton::SetPosition(int x, int y)			{ m_position.set(x, y); }
-void MyButton::SetValue(bool newValue)				{ m_pressed = newValue; }
-void MyButton::SetName(std::string &name)			{ m_name = name; }
+void MyButton::SetPosition(ofVec2f &position)		{ m_position.set(position); SetFontPosition(m_textPosition, m_textMargin);}
+void MyButton::SetPosition(int x, int y)			{ m_position.set(x, y); SetFontPosition(m_textPosition, m_textMargin); }
+void MyButton::SetToggleValue(bool newValue)		{ m_pressed = newValue; }
+void MyButton::SetText(std::string name)			{ m_name = name; }
 void MyButton::SetSize(int w, int h)				{ 
 	m_width = w; 
 	m_height = h;
@@ -26,6 +28,7 @@ void MyButton::SetColor(ofColor &colorDefault, ofColor &colorPressed) {
 	m_colorDefault.set(colorDefault); 
 	m_colorPressed.set(colorPressed); 
 }
+
 
 void MyButton::SetColor(int r_D, int g_D, int b_D, int a_D, int r_P, int g_P, int b_P, int a_P){
 	m_colorDefault.set(r_D, g_D, b_D, a_D);
@@ -72,26 +75,35 @@ void MyButton::SetFontPosition(int position, float margin) {
 							m_position.y + m_height / 2.0f + m_font.stringHeight(m_name) / 2.0f);
 		break;
 	default:
-		m_fontPosition.set(m_position.x + m_width / 2.0f - m_font.stringWidth(m_name) / 2.0f,
-			m_position.y + m_height / 2.0f + m_font.stringHeight(m_name) / 2.0f);
+		m_fontPosition.set(m_position.x + m_width / 2.0f - m_font.stringWidth(m_name) / 2.0f + margin,
+			m_position.y + m_height / 2.0f - 7.0f + m_font.stringHeight(m_name) / 2.0f);
 		break;
 	}
 }
 
 
-void MyButton::LoadFont(ofTrueTypeFont &font, ofColor &color) {
+
+void MyButton::SetFontPosition() {
+	m_fontPosition.set(m_position.x + m_width / 2.0f - m_font.stringWidth(m_name) / 2.0f,
+		m_position.y + m_height / 2.0f + m_font.stringHeight(m_name) / 2.0f);
+}
+
+void MyButton::LoadFont(ofTrueTypeFont font, ofColor &color) {
 	m_font = font;
 	m_fontColor.set(color);
+	SetFontPosition(m_textPosition, m_textMargin);
 }
 
-void MyButton::LoadFont(std::string &font, int size, ofColor &color) {
+void MyButton::LoadFont(std::string font, int size, ofColor &color) {
 	m_font.load(font, size);
 	m_fontColor.set(color);
+	SetFontPosition(m_textPosition, m_textMargin);
 }
 
-void MyButton::LoadFont(std::string &font, int size, int r, int g, int b, int a) {
+void MyButton::LoadFont(std::string font, int size, int r, int g, int b, int a) {
 	m_font.load(font, size);
 	m_fontColor.set(r, g, b, a);
+	SetFontPosition(m_textPosition, m_textMargin);
 }
 
 
@@ -100,7 +112,7 @@ void MyButton::LoadFont(std::string &font, int size, int r, int g, int b, int a)
 MyButton::MyButton()
 {
 	m_pressed = false;
-	m_position.set(0, 0);
+	SetPosition(ofVec2f(0,0));
 	m_width = 0;
 	m_height = 0;
 	m_colorDefault.set(255, 255, 255);
@@ -114,7 +126,8 @@ MyButton::MyButton()
 // Construtor para o botao
 MyButton::MyButton(std::string name, int textPosition, float margin, bool value, ofVec2f &position, int width, int heigth) {
 	m_pressed = value;
-	m_position.set(position);
+	//m_position.set(position);
+	SetPosition(position);
 	m_width = width;
 	m_height = heigth;
 	m_name = name;
@@ -130,7 +143,8 @@ MyButton::MyButton(std::string name, int textPosition, float margin, bool value,
 // Construtor para o botao
 MyButton::MyButton(std::string name, int textPosition, float margin, bool value, int x, int y, int width, int heigth) {
 	m_pressed = value;
-	m_position.set(x, y);
+	//m_position.set(x, y);
+	SetPosition(ofVec2f(x,y));
 	m_width = width;
 	m_height = heigth;
 	m_name = name;

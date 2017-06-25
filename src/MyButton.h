@@ -37,7 +37,7 @@ class MyButton
 
 
 		~MyButton();
-		void SetName(std::string &name);
+		void SetText(std::string name);
 		void SetPosition(ofVec2f &position);
 		void SetPosition(int x, int y);
 		void SetColor(ofColor &colorDefault, ofColor &colorPressed);
@@ -50,19 +50,20 @@ class MyButton
 		void SetSprite(std::string localSprite);
 		void SetSprite(ofImage &spriteDefault, ofImage &spritePressed);
 		void SetSprite(std::string localSpriteDefault, std::string localSpritePressed);
-		void SetValue(bool newValue);
+		void SetToggleValue(bool newValue);
 		void SetFontColor(ofColor &color);
 		void SetFontColor(int r, int g, int b, int a);
+		void SetFontPosition();
 		void SetFontPosition(int position, float margin);
 		void SetSize(int w, int h);
-
-
+		
+		const ofVec2f & GetStringSize(std::string text) const;
 		const ofVec2f & GetPosition() const;
 		const bool & IsPressed()	  const;
-		const std::string & GetName() const;
-		void LoadFont(ofTrueTypeFont &font, ofColor &color);
-		void LoadFont(std::string &font, int size, ofColor &color);
-		void LoadFont(std::string &font, int size, int r, int g, int b, int a);
+		const std::string & GetText() const;
+		void LoadFont(ofTrueTypeFont font, ofColor &color);
+		void LoadFont(std::string font, int size, ofColor &color);
+		void LoadFont(std::string font, int size, int r, int g, int b, int a);
 
 		virtual void Draw();
 		virtual void Update();
@@ -71,5 +72,6 @@ class MyButton
 		void DrawSprite();
 		void DrawSquare();
 		bool MouseClickedButton();
+
 };
 
